@@ -3,11 +3,12 @@ import asyncHandler from "../utils/asyncHandler.js";
 import Admin from "../models/admin.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const adminRegister = asyncHandler(async (req, res) => {
+const adminRegister = asyncHandler(async (req, res, next) => {
     const { fullname, email, password } = req.body;
-    if (!CSSFontFeatureValuesRulename || !email || !password) throw new ApiError(400, "Please provide all fields.. name, email and password");
-    let admin = Admin.find();
-    if (admin) throw new ApiError(400, "Only one admin can be allowed to register");
+    if (!fullname || !email || !password) throw new ApiError(400, "Please provide all fields.. name, email and password");
+    let admin = await Admin.find();
+
+    if (admin.length != 0) throw new ApiError(400, "Only one admin can be allowed to register");
     admin = await Admin.create({ fullname, email, password });
     if (!admin) throw new ApiError(500, "Admin registration failed due to server errors");
     res.status(201).json(new ApiResponse(201, {...admin._doc, password: null }, "Admin registered successfully"));
