@@ -1,7 +1,7 @@
 import express from "express";
 const app = express();
 import cors from "cors";
-import exampleRouter from "./routes/example.routes.js";
+import adminRouters from "./routes/admin.routers.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 
 app.use(cors({
@@ -15,7 +15,9 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}));
 app.get("/", (req, res) => {
   res.send("Hello from the backend server!");
 });
-app.use("/example", exampleRouter);
+
+app.use("/api/v1/admin", adminRouters);
+
 app.use(globalErrorHandler);
 
 export {app};

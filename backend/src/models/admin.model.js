@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const adminSchema = new mongoose.Schema({
     fullname: {
-        String: true,
+        type: String,
         required: true,
         trim: true,
     },
