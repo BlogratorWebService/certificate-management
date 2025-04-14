@@ -1,8 +1,10 @@
 import express from "express";
 const app = express();
 import cors from "cors";
-import adminRouters from "./routes/admin.routers.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
+
+import adminRouters from "./routes/admin.routers.js";
+import certificateRouters from "./routes/certificate.routers.js";
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -17,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/admin", adminRouters);
+app.use("/api/v1/cert", certificateRouters);
 
 app.use(globalErrorHandler);
 

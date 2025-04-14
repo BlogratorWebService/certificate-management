@@ -19,7 +19,7 @@ const createCertificate = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, certificate, "Certificate created successfully!"));
 });
 
-const getCertificates = asyncHandler(async (req, res) => {
+const getCertificate = asyncHandler(async (req, res) => {
     const certificateId = req?.params?.certificateId;
     if (!certificateId) throw new ApiError(400, "Provide certificate ID");
 
@@ -28,4 +28,4 @@ const getCertificates = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, cert, "Certificate fetched successfully!"));
 });
 
-export { createCertificate, getCertificates };
+export { createCertificate, getCertificate };
