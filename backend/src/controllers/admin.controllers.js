@@ -22,7 +22,16 @@ const adminLogin = asyncHandler(async (req, res) => {
     if (!admin) throw new ApiError(401, "Invalid passsword or email");
     const isMatch = await admin.isCorrectPassword(password);
     if (!isMatch) throw new ApiError(401, "Invalid passsword or email");
-    res.status(200).json(new ApiResponse(200, { ...admin._doc, password: null }, "Admin logged in successfully"));
+
+    const token = await admin.generateToken();
+
+    if (!token) throw new ApiError(500, "Error while generation jwt token");
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    res.status(200).cookie("token", token, options).json(new ApiResponse(200, { ...admin._doc, password: null }, "Admin logged in successfully"));
 });
 
 export { adminRegister, adminLogin };
