@@ -1,97 +1,75 @@
-import { Award, FileText, Plus, Settings, User } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { PlusCircle, Users, UserCircle } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-export function AppSidebar() {
-  // Navigation items
-  const certificateItems = [
-    {
-      title: "Create Certificate",
-      path: "/",
-      icon: Plus,
-    },
-    {
-      title: "Manage Certificates",
-      path: "/certificates/manage",
-      icon: FileText,
-    },
-  ];
+const navItems = [
+  {
+    title: "Dashboard",
+    href: "/",
+    icon: Users,
+  },
+  {
+    title: "New Student",
+    href: "/new",
+    icon: PlusCircle,
+  },
+];
 
-  const accountItems = [
-    {
-      title: "Profile",
-      path: "/profile",
-      icon: User,
-    },
-    {
-      title: "Settings",
-      path: "/settings",
-      icon: Settings,
-    },
-  ];
+const profileItem = {
+  title: "Profile",
+  href: "/profile",
+  icon: UserCircle,
+};
+
+export function AppSidebar() {
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  const isActive = (path: string) => {
+    if (path === "/" && pathname === "/") return true;
+    return path !== "/" && pathname.startsWith(path);
+  };
 
   return (
     <Sidebar>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Certificates</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {certificateItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Account</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {accountItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarMenu className="pt-5">
+          {navItems.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild isActive={isActive(item.href)}>
+                <Link to={item.href}>
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="border-t border-sidebar-border p-4">
-        <div className="text-xs text-muted-foreground">
-          © 2025 Certificate Portal
-        </div>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={isActive(profileItem.href)}>
+              <Link to={profileItem.href}>
+                <profileItem.icon className="h-4 w-4" />
+                <span>{profileItem.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
 }
+
+export default AppSidebar;
