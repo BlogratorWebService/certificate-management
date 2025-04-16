@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainLayout from "./layout/MainLayout";
+import Dashboard from "./pages/dashboard/page";
+import Login from "./pages/login/page";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <h1 className='bg-green-500'>htello how are you i am a rider provider</h1>
-  )
-}
+    <Router>
 
-export default App
+      <Routes>
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
+        </Route>
+      </Routes>
+      
+    </Router>
+  );
+};
+
+export default App;
