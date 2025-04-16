@@ -5,7 +5,7 @@ import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import cookieParser from "cookie-parser";
 
 import adminRouters from "./routes/admin.routers.js";
-import certificateRouters from "./routes/certificate.routers.js";
+import StudentRouters from "./routes/student.routers.js";
 
 app.use(
   cors({
@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/admin", adminRouters);
-app.use("/api/v1/cert", certificateRouters);
+app.use("/api/v1/student", StudentRouters);
 
 app.use(globalErrorHandler);
 
