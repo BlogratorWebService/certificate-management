@@ -3,12 +3,14 @@ import { AppSidebar } from "./AppSidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const MainLayout = () => {
+
   return (
-    <div className="w-full flex flex-col h-screen">
+    <div className="w-full flex h-screen">
       <AppSidebar />
-          <SidebarTrigger />
-          
-      <main className="flex-grow p-4">
+      <main
+        className={`flex-grow p-4 transition-all duration-300`}
+      >
+        <SidebarTrigger />
         <Outlet />
       </main>
     </div>
