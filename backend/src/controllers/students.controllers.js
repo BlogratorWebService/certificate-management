@@ -1,13 +1,13 @@
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import asyncHandler from "../utils/asyncHandler";
-import Student from "../models/student.model";
-import { uploadOnCloudinary } from "../utils/uploadOnCloudinary";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import Student from "../models/student.model.js";
+import { uploadOnCloudinary } from "../utils/uploadOnCloudinary.js";
 
 const newStudent = asyncHandler(async (req, res) => {
   const { name, courseName, endDate, startDate, registrationNumber } = req.body;
-  const certificateFile = req.files["certificate"][0]?.path;
-  const marksheetFile = req.files["marksheet"][0]?.path;
+const certificateFile = req.files.certificateFile[0].path;
+const marksheetFile = req.files.marksheetFile[0].path;
 
   if (
     !name ||
