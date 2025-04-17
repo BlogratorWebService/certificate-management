@@ -6,8 +6,12 @@ import { uploadOnCloudinary } from "../utils/uploadOnCloudinary.js";
 
 const newStudent = asyncHandler(async (req, res) => {
   const { name, courseName, endDate, startDate, registrationNumber } = req.body;
-const certificateFile = req.files.certificateFile[0].path;
-const marksheetFile = req.files.marksheetFile[0].path;
+  
+const certificateArray = req.files?.certificateFile;
+const certificateFile = certificateArray?.[0]?.path || null;
+
+const marksheetArray = req.files?.marksheetFile;
+const marksheetFile = marksheetArray?.[0]?.path || null;
 
   if (
     !name ||
@@ -19,6 +23,13 @@ const marksheetFile = req.files.marksheetFile[0].path;
     !marksheetFile
   )
     throw new ApiError(400, "Fill all the required inputs");
+  
+  const studentExists = await Student.findOne({
+    registrationNumber,
+  });
+
+  if (studentExists) throw new ApiError(400, "Student already exists");
+  if (endDate < startDate) throw new ApiError(400, "End date should be greater than start date");
 
   const certificateUrl = await uploadOnCloudinary(certificateFile);
   if (!certificateUrl)
