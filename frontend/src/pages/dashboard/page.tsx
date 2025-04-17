@@ -1,5 +1,5 @@
-import {Link} from "react-router-dom";
-import { PlusCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AlertCircle, PlusCircle, UserX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,13 +18,143 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getAllStudents } from "@/services/apiServices";
+import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Mock student data
-const students = [
-  { _id: 1, name: "Sree Gopal Saha", registrationNumber: "2023001" },
-];
+interface Student {
+  _id: string;
+  name: string;
+  registrationNumber: string;
+  courseName: string;
+  startDate: string;
+  endDate: string;
+  certificateUrl: string;
+  marksheetUrl: string;
+}
 
 export default function Dashboard() {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchStudents = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await getAllStudents();
+      setStudents(response.data.data);
+    } catch (err: any) {
+      console.log("Error fetching students:", err);
+      setError(
+        err.response?.data?.message ||
+          "An error occurred please check your network connection and try again"
+      );
+      setStudents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const renderTableContent = () => {
+    if (loading) {
+      return (
+        <TableBody>
+          {[...Array(3)].map((_, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <Skeleton className="h-10 w-1/2" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-10 w-1/2" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      );
+    }
+
+    if (error) {
+      return (
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={2} className="h-24 text-center">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <AlertCircle className="h-8 w-8 text-destructive" />
+                <p className="text-sm text-muted-foreground">{error}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={fetchStudents}
+                  className="mt-2"
+                >
+                  Try Again
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      );
+    }
+
+    if (students.length === 0) {
+      return (
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={2} className="h-24 text-center">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <UserX className="h-8 w-8 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">
+                  No students found
+                </p>
+                <Link to="/new">
+                  <Button size="sm" className="mt-2">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Add New Student
+                  </Button>
+                </Link>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      );
+    }
+
+    return (
+      <TableBody>
+        {students.map((student) => (
+          <TableRow
+            key={student._id}
+            className="cursor-pointer hover:bg-muted/50"
+          >
+            <TableCell>
+              <Link
+                to={`/student/${student.registrationNumber}`}
+                className="block w-full"
+              >
+                {student.name}
+              </Link>
+            </TableCell>
+            <TableCell>
+              <Link
+                to={`/student/${student.registrationNumber}`}
+                className="block w-full"
+              >
+                {student.registrationNumber}
+              </Link>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    );
+  };
+
   return (
     <div className="w-full">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -42,6 +172,15 @@ export default function Dashboard() {
             </Button>
           </Link>
         </div>
+
+        {error && !loading && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
@@ -66,31 +205,7 @@ export default function Dashboard() {
                   <TableHead>Registration Number</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {students.map((student) => (
-                  <TableRow
-                    key={student._id}
-                    className="cursor-pointer hover:bg-muted/50"
-                  >
-                    <TableCell>
-                      <Link
-                        to={`/student/${student.registrationNumber}`}
-                        className="block w-full"
-                      >
-                        {student.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        to={`/student/${student.registrationNumber}`}
-                        className="block w-full"
-                      >
-                        {student.registrationNumber}
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              {renderTableContent()}
             </Table>
           </CardContent>
         </Card>

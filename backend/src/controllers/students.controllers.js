@@ -69,4 +69,14 @@ const getStudent = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, student, "Student fetched successfully!"));
 });
 
-export { newStudent, getStudent };
+const getAllStudents = asyncHandler(async (req, res) => {
+  const students = await Student.find({}).sort({ createdAt: -1 });
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, students, "Students fetched successfully!"));
+}
+);
+
+
+export { newStudent, getStudent, getAllStudents };

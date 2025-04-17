@@ -17,4 +17,6 @@ api.interceptors.request.use((config) => {
 
 
 export const loginUser = (data: FormData) => api.post('/admin/login', data);
+export const getAllStudents = () => api.get('/student/all');
+export const getStudent = (registrationNumber: string) => api.get(`/student/get/${registrationNumber}`);
 export const createStudent = (data : FormData) => api.post('/student/new', data);
