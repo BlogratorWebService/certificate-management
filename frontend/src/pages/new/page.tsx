@@ -15,7 +15,8 @@ interface FormDataType {
 
 export default function NewStudent() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState<FormDataType>({
     name: "",
@@ -39,6 +40,7 @@ export default function NewStudent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess(false);
     setLoading(true);
 
     const formPayload = new FormData();
@@ -58,6 +60,7 @@ export default function NewStudent() {
     try {
       const res = await createStudent(formPayload);
       console.log("Student created successfully:", res.data.data);
+      setSuccess(true);
 
     } catch (err : any) {
       console.error("Submission error:", err);
@@ -75,6 +78,7 @@ export default function NewStudent() {
       formData={formData}
       loading={loading}
       error={error}
+      success={success}
     />
   );
 }

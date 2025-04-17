@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Loader2 } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import {
@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   handleSubmit: (e: React.FormEvent) => void;
@@ -31,7 +32,8 @@ interface Props {
     marksheetFile: File | null;
   };
   loading: boolean;
-  error: string | null;
+  error: string;
+  success: boolean;
 }
 
 function NewStudentContainer({
@@ -40,32 +42,57 @@ function NewStudentContainer({
   formData,
   loading,
   error,
+  success,
 }: Props) {
+    const navigate = useNavigate();
+
   return (
     <div className="w-full bg-background p-6">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold tracking-tight text-primary">
           New Student
         </h2>
-        <p className="text-muted-foreground mt-2">
-          Enter student information
-        </p>
+        <p className="text-muted-foreground mt-2">Enter student information</p>
 
-        {/* Loading Dialog */}
-        <Dialog open={loading} onOpenChange={() => {}}>
+        <Dialog
+          open={loading || success}
+          onOpenChange={() => {
+            if (success) {
+              navigate("/");
+            }
+          }}
+        >
           <DialogContent className="sm:max-w-md">
             <DialogHeader className="text-center">
-              <DialogTitle>Files Uploading</DialogTitle>
+              <DialogTitle>
+                {loading ? "Files Uploading" : "Upload Successful"}
+              </DialogTitle>
               <DialogDescription className="flex flex-col items-center gap-4 pt-4">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <div className="text-center">
-                  <p className="font-medium">
-                    Please wait while your files are being uploaded
-                  </p>
-                  <p className="text-muted-foreground mt-1">
-                    Do not close this window or navigate away
-                  </p>
-                </div>
+                {!success ? (
+                  <>
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <div className="text-center">
+                      <p className="font-medium">
+                        Please wait while your files are being uploaded
+                      </p>
+                      <p className="text-muted-foreground mt-1">
+                        Do not close this window or navigate away
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="h-8 w-8 text-green-500" />
+                    <div className="text-center">
+                      <p className="font-medium">
+                        Your files have been uploaded!
+                      </p>
+                      <p className="text-muted-foreground mt-1">
+                        You may now safely close this window.
+                      </p>
+                    </div>
+                  </>
+                )}
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
