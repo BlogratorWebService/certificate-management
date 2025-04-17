@@ -14,9 +14,18 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response.status === 401) {
+            Cookies.remove('token');
+            window.location.reload();
+        }
+        return Promise.reject(error);
+    }
+);
 
-
-export const loginUser = (data: FormData) => api.post('/admin/login', data);
+export const loginAdmin = (data: {email : string, password : string}) => api.post('/admin/login', data);
 export const getAllStudents = () => api.get('/student/all');
 export const getStudent = (registrationNumber: string) => api.get(`/student/get/${registrationNumber}`);
 export const createStudent = (data : FormData) => api.post('/student/new', data);

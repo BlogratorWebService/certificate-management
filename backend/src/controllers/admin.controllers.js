@@ -31,7 +31,16 @@ const adminLogin = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true
     }
-    res.status(200).cookie("token", token, options).json(new ApiResponse(200, { ...admin._doc, password: null }, "Admin logged in successfully"));
+    res
+      .status(200)
+      .cookie("token", token, options)
+      .json(
+        new ApiResponse(
+          200,
+          { admin: { ...admin._doc, password: null }, token: token },
+          "Admin logged in successfully"
+        )
+      );
 });
 
 export { adminRegister, adminLogin };
