@@ -30,6 +30,7 @@ interface Props {
     endDate: string;
     certificateFile: File | null;
     marksheetFile: File | null;
+    studentPicFile: File | null;
   };
   loading: boolean;
   error: string;
@@ -44,7 +45,7 @@ function NewStudentContainer({
   error,
   success,
 }: Props) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full bg-background p-6">
@@ -219,7 +220,7 @@ function NewStudentContainer({
                 <h3 className="text-md font-semibold text-primary mb-4">
                   Documents
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-2">
                     <Label
                       htmlFor="certificateFile"
@@ -256,6 +257,25 @@ function NewStudentContainer({
                     />
                     <p className="text-xs text-muted-foreground">
                       Accept PDF, JPG or PNG (max 5MB)
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="studentPicFile"
+                      className="text-foreground font-medium"
+                    >
+                      Student Photo
+                    </Label>
+                    <Input
+                      id="studentPicFile"
+                      name="studentPicFile"
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={handleChange}
+                      className="border-input focus:border-primary"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Accept JPG or PNG only (max 2MB)
                     </p>
                   </div>
                 </div>

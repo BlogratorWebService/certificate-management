@@ -11,6 +11,7 @@ interface FormDataType {
   endDate: string;
   certificateFile: File | null;
   marksheetFile: File | null;
+  studentPicFile: File | null;
 }
 
 export default function NewStudent() {
@@ -26,6 +27,7 @@ export default function NewStudent() {
     endDate: new Date().toISOString().split("T")[0],
     certificateFile: null,
     marksheetFile: null,
+    studentPicFile: null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +57,9 @@ export default function NewStudent() {
     }
     if (formData.marksheetFile) {
       formPayload.append("marksheetFile", formData.marksheetFile);
+    }
+    if (formData.studentPicFile) {
+      formPayload.append("studentPicFile", formData.studentPicFile);
     }
 
     try {

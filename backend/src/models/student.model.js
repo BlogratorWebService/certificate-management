@@ -6,6 +6,10 @@ const studentSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  studentPicUrl: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -29,7 +33,7 @@ const studentSchema = new mongoose.Schema({
   marksheetUrl: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const Student = mongoose.model("Student", studentSchema);
