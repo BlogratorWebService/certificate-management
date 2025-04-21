@@ -48,7 +48,7 @@ function NewStudentContainer({
   const navigate = useNavigate();
 
   return (
-    <div className="w-full bg-background p-6">
+    <div className="w-full bg-background p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold tracking-tight text-primary">
           New Student

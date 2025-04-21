@@ -128,7 +128,7 @@ export default function StudentPage() {
           Student Information
         </h1>
       </header>
-      <main className="flex flex-1 flex-col gap-6 p-6">
+      <main className="flex flex-1 flex-col gap-6 md:p-6 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/">
