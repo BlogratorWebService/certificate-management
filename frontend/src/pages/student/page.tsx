@@ -23,6 +23,7 @@ interface Student {
   endDate: string;
   certificateUrl: string;
   marksheetUrl: string;
+  studentPicUrl: string;
 }
 
 export default function StudentPage() {
@@ -121,7 +122,7 @@ export default function StudentPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background">
+      <div className="flex min-h-screen w-full flex-col bg-background">
       <header className="sticky top-0 z-10 flex h-14 items-center border-b bg-background px-6">
         <h1 className="text-lg font-medium text-foreground">
           Student Information
@@ -146,10 +147,21 @@ export default function StudentPage() {
         </div>
 
         <Card className="shadow-sm">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-muted-foreground">
-              Registration: {student.registrationNumber}
-            </CardDescription>
+          <CardHeader className="pb-2 flex items-center">
+            <div className="flex flex-col sm:flex-row w-full items-center sm:items-start gap-4">
+              <div className="rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-100">
+                <img 
+                  src={student.studentPicUrl} 
+                  alt={`${student.name}'s profile`} 
+                  className="h-24 w-24 object-cover"
+                />
+              </div>
+              <div className="flex flex-col w-full">
+                <CardDescription className="text-muted-foreground text-center sm:text-left">
+                  Registration: {student.registrationNumber}
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="grid gap-y-4 gap-x-8 sm:grid-cols-2">

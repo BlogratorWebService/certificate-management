@@ -80,36 +80,13 @@ export default function Dashboard() {
       );
     }
 
-    if (error) {
-      return (
-        <TableBody>
-          <TableRow>
-            <TableCell colSpan={2} className="h-24 text-center">
-              <div className="flex flex-col items-center justify-center gap-2">
-                <AlertCircle className="h-8 w-8 text-destructive" />
-                <p className="text-sm text-muted-foreground">{error}</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={fetchStudents}
-                  className="mt-2"
-                >
-                  Try Again
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      );
-    }
-
     if (students.length === 0) {
       return (
         <TableBody>
           <TableRow>
             <TableCell colSpan={2} className="h-24 text-center">
               <div className="flex flex-col items-center justify-center gap-2">
-                <UserX className="h-8 w-8 text-muted-foreground" />
+                <UserX className="h-8 max-w-8 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground">
                   No students found
                 </p>
@@ -127,7 +104,7 @@ export default function Dashboard() {
     }
 
     return (
-      <TableBody>
+      <TableBody className="w-full max-w-full">
         {students.map((student) => (
           <TableRow
             key={student._id}
@@ -174,7 +151,7 @@ export default function Dashboard() {
         </div>
 
         {error && !loading && (
-          <Alert variant="destructive" className="mb-4">
+          <Alert variant="destructive" className="mb-4 w-full max-w-full">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
