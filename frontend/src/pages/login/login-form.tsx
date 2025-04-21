@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader } from "lucide-react";
+import { AlertCircle, Loader } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface props {
   className?: string
@@ -17,9 +18,10 @@ interface props {
     email: string
     password: string
   }
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  handleSubmit: (e: React.FormEvent) => void
-  loading: boolean
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+  loading: boolean;
+  error: string;
 }
 
 
@@ -29,6 +31,7 @@ export function LoginForm({
   handleChange,
   handleSubmit,
   loading,
+  error
 }: props) {
   return (
     <div className={cn("flex flex-col gap-6", className)}>
@@ -41,6 +44,12 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -50,7 +59,7 @@ export function LoginForm({
                   name="email"
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
@@ -75,7 +84,13 @@ export function LoginForm({
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
-                  {loading ? <><Loader className="animate-spin" /></> :"Login"}
+                  {loading ? (
+                    <>
+                      <Loader className="animate-spin" />
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
               </div>
             </div>

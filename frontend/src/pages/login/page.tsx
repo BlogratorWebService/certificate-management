@@ -11,6 +11,7 @@ interface loginForm {
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const token = Cookies.get("token");
   if (token) {
@@ -35,8 +36,12 @@ const LoginPage = () => {
       const token = res.data.data.token;
       Cookies.set("token", token, { expires: 1 });
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error logging in:", error);
+      setError(
+        error.response?.data?.message ||
+          "An error occurred please check your network connection and try again"
+      );
     } finally {
       setLoading(false);
     }
@@ -82,6 +87,7 @@ const LoginPage = () => {
           handleSubmit={handleSubmit}
           className="backdrop-blur-sm"
           loading={loading}
+          error={error}
         />
       </div>
     </div>

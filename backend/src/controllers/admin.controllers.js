@@ -19,9 +19,9 @@ const adminLogin = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) throw new ApiError(400, "Please provide all fields.. email and password");
     const admin = await Admin.findOne({ email }).select("+password");
-    if (!admin) throw new ApiError(401, "Invalid passsword or email");
+    if (!admin) throw new ApiError(400, "Invalid passsword or email");
     const isMatch = await admin.isCorrectPassword(password);
-    if (!isMatch) throw new ApiError(401, "Invalid passsword or email");
+    if (!isMatch) throw new ApiError(400, "Invalid passsword or email");
 
     const token = await admin.generateToken();
 
