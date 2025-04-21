@@ -68,7 +68,7 @@ export default function NewStudent() {
       setSuccess(true);
 
     } catch (err : any) {
-      console.error("Submission error:", err);
+      console.log("Submission error:", err);
       setError(err.response?.data?.message || "An error occurred please check your network connection and try again");
     }
     finally {

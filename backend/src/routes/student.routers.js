@@ -12,7 +12,7 @@ router.get("/get/:registrationNumber", getStudent);
 router.get("/all", checkAuth, getAllStudents);
 router.post(
   "/new",
-  upload.fields([{ name: "certificateFile" }, { name: "marksheetFile" }]),
+  upload.fields([{ name: "certificateFile" }, { name: "marksheetFile" }, { name: "studentPicFile" }]),
   checkAuth,
   newStudent
 );
