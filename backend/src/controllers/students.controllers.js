@@ -37,7 +37,7 @@ const newStudent = asyncHandler(async (req, res) => {
   if (endDate < startDate)
     throw new ApiError(400, "End date should be greater than start date");
 
-  const baseUrl = `${req.protocol}://${req.get("host")}`;
+  const baseUrl = `https://backend.gifsind.in`;
 
   const certificateUrl = `${baseUrl}${normalizePublicPath(certificateFile)}`;
   const marksheetUrl = `${baseUrl}${normalizePublicPath(marksheetFile)}`;
