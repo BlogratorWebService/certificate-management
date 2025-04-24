@@ -40,3 +40,9 @@ export const getStudent = (registrationNumber: string) =>
 
 export const createStudent = (data: FormData) =>
   api.post("/student/new", data);
+
+export const deleteStudent = (registrationNumber: string) => 
+  api.get(`/student/delete/${registrationNumber}`);
+
+export const getAdmin = () =>
+  api.get(`admin/me`);

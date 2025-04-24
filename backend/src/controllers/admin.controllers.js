@@ -2,6 +2,7 @@ import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import Admin from "../models/admin.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { get } from "mongoose";
 
 const adminRegister = asyncHandler(async (req, res, next) => {
     const { fullname, email, password } = req.body;
@@ -43,4 +44,10 @@ const adminLogin = asyncHandler(async (req, res) => {
       );
 });
 
-export { adminRegister, adminLogin };
+const getAdmin = asyncHandler(async(req, res) => {
+  const admin = await Admin.findOne().select("-password");
+  if (!admin) throw new ApiError(404, "No admin account found");
+  res.status(200).json(new ApiResponse(200, admin, "admin fetched"));
+})
+
+export { adminRegister, adminLogin, getAdmin };

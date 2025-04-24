@@ -1,7 +1,15 @@
-import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Trash2, Download } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, Trash2, Download, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Card,
   CardContent,
@@ -11,7 +19,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useEffect, useState } from "react";
-import { getStudent } from "@/services/apiServices";
+import { deleteStudent, getStudent } from "@/services/apiServices";
 import StudentLoading from "@/components/loading/StudentLoading";
 
 interface Student {
@@ -30,8 +38,26 @@ export default function StudentPage() {
   const [student, setStudent] = useState<Student | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const params = useParams();
+
+  const handleDelete = async (registrationNumber: string) => {
+    setDeleting(true);
+    try {
+      await deleteStudent(registrationNumber);
+      navigate("/");
+    } catch (error: any) {
+      setDeleteError(
+        error.response?.data?.message || "Please refresh the page"
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const fetchStudent = async () => {
     setLoading(true);
@@ -65,7 +91,7 @@ export default function StudentPage() {
   };
 
   if (loading) {
-    return (<StudentLoading />);
+    return <StudentLoading />;
   }
 
   if (error) {
@@ -122,7 +148,7 @@ export default function StudentPage() {
   }
 
   return (
-      <div className="flex min-h-screen w-full flex-col bg-background">
+    <div className="flex min-h-screen w-full flex-col bg-background">
       <header className="sticky top-0 z-10 flex h-14 items-center border-b bg-background px-6">
         <h1 className="text-lg font-medium text-foreground">
           Student Information
@@ -140,19 +166,60 @@ export default function StudentPage() {
               {student.name}
             </h2>
           </div>
-          <Button variant="destructive" size="sm">
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
+
+          <Dialog onOpenChange={() => setDeleteError(null)}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Trash2 className="mr-2 h-4 w-4 text-red-500" />
+                Delete
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="space-y-4">
+              <DialogHeader>
+                <DialogTitle>Are you sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  student record.
+                </DialogDescription>
+              </DialogHeader>
+
+              {deleteError && (
+                <Alert variant="destructive">
+                  <AlertTitle className="text-sm font-medium">
+                    {deleteError}
+                  </AlertTitle>
+                </Alert>
+              )}
+
+              <div className="flex justify-end space-x-2">
+                <Button
+                  onClick={() => handleDelete(student.registrationNumber)}
+                  variant="destructive"
+                  className="min-w-25"
+                  disabled={deleting}
+                >
+                  {deleting ? (
+                    <Loader2 className="animate-spin h-4 w-4" />
+                  ) : (
+                    "Delete"
+                  )}
+                </Button>
+                <DialogTrigger asChild>
+                  <Button variant="ghost">Cancel</Button>
+                </DialogTrigger>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <Card className="shadow-sm">
           <CardHeader className="pb-2 flex items-center">
             <div className="flex flex-col sm:flex-row w-full items-center sm:items-start gap-4">
               <div className="rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-100">
-                <img 
-                  src={student.studentPicUrl} 
-                  alt={`${student.name}'s profile`} 
+                <img
+                  src={student.studentPicUrl}
+                  alt={`${student.name}'s profile`}
                   className="h-24 w-24 object-cover"
                 />
               </div>

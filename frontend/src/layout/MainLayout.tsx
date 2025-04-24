@@ -8,7 +8,7 @@ const MainLayout = () => {
     <div className="w-full flex h-screen">
       <AppSidebar />
       <main
-        className={`checking flex-grow md:p-4 transition-all duration-300`}
+        className={`checking flex-grow md:p-4 p-2 transition-all duration-300`}
       >
         <SidebarTrigger />
         <Outlet />

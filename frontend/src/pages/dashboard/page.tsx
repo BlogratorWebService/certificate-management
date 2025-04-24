@@ -139,7 +139,7 @@ export default function Dashboard() {
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
             <p className="text-muted-foreground">
-              Manage your students and their information
+              Manage your students
             </p>
           </div>
           <Link to="/new">

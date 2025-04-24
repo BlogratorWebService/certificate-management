@@ -5,13 +5,14 @@ import Login from "./pages/login/page";
 import NewStudent from "./pages/new/page";
 import StudentPage from "./pages/student/page";
 import PrivateRoute from "./components/PrivateRoutes";
+import AdminProfilePage from "./pages/profile/page";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
-        
+
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
@@ -20,6 +21,7 @@ const App = () => {
               path="/student/:registrationNumber"
               element={<StudentPage />}
             />
+            <Route path="profile" element={<AdminProfilePage/>} />
           </Route>
         </Route>
       </Routes>
